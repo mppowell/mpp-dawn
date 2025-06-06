@@ -1,0 +1,484 @@
+<style>
+    html {
+        scroll-snap-type: y mandatory;
+        scroll-behavior: smooth;
+        overflow-x: hidden;
+    }
+
+    .mpp-collection-section {
+        position: relative;
+        left: 50%;
+        margin-left: -50vw;
+        width: 100vw;
+        background-color: #f4f4f4;
+    }
+
+    .mpp-collection-section * {
+        padding: 0;
+        margin: 0;
+    }
+
+    .mpp-collection-section h2 {
+        font-size: 2.2rem;
+    }
+
+    .mpp-collection-section p {
+        font-size: 1.3rem;
+    }
+
+    .mpp-collection-section li {
+        list-style: none;
+        font-size: 1.3rem;
+    }
+
+    .mpp-slider-track {
+        position: absolute;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 9999 !important;
+    }
+    
+    .mpp-drawer {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+        background-color: #f4f4f4;
+        transition: transform 0.3s ease;
+        overflow: auto;
+    }
+
+    .mpp-drawer-bottom {
+        top: auto;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 85vh;
+        padding: 20px 50px;
+        transform: translateY(100%);
+    }
+
+    .mpp-drawer-left {
+        top: 0;
+        left: 0;
+        width: 650px;
+        height: 100%;
+        padding: 20px 50px;
+        transform: translateX(-100%);
+    }
+
+    .mpp-drawer-right {
+        top: 0;
+        right: 0;
+        width: 650px;
+        height: 100%;
+        padding: 20px 50px;
+        transform: translateX(100%);
+    }
+
+    .mpp-drawer svg {
+        position: absolute;
+        left: 30px;
+        top: 20px;
+        pointer-events: auto;
+        cursor: pointer;
+    }
+
+    .mpp-gallery-content {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(15vw, 1fr));
+        grid-auto-rows: min-content;
+        gap: 1vw;
+    }
+
+    .mpp-info-content {
+        text-align: justify;
+    }
+
+    .mpp-info-drawer h3 {
+        margin-bottom: 10px;
+    }
+
+    .mpp-info-section {
+        margin-bottom: 40px;
+    }
+
+    .mpp-info-description {
+        font-family: "Maven Pro", sans-serif;
+    }
+
+    .mpp-info-exif {
+        text-align: right;
+    }
+
+    .mpp-info-button {
+        display: block;
+        margin: auto;
+    }
+
+    .mpp-drawer-content {
+        width: 100%;
+        height: 100%;
+        max-width: 1000px;
+    }
+
+    .mpp-open.mpp-drawer-bottom {
+        transform: translateY(0);
+    }
+
+    .mpp-open.mpp-drawer-left, .mpp-open.mpp-drawer-right {
+        transform: translateX(0);
+    }
+
+    .mpp-gallery-image {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+        display: block;
+    }
+
+    .mpp-gallery-link {
+        pointer-events: auto;
+    }
+
+    .mpp-slider-window {
+        position: sticky;
+        top: 0;
+        width: 100%;
+        height: 100vh;
+        height: 100dvh;
+        overflow: hidden;
+        z-index: 100;
+    }
+
+    .mpp-window-overlay {
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .mpp-open .mpp-window-overlay {
+        background-color: black;
+        opacity: 0.6;
+    }
+
+    .mpp-drawer-menu {
+        position: absolute;
+        width: 100%;
+        bottom: 30px;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+    }
+
+    .mpp-drawer-menu li {
+        width: 110px;
+        text-align: center;
+        border-right: 1px solid currentColor;
+        pointer-events: auto;
+        cursor: pointer;
+    }
+
+    .mpp-drawer-menu li:last-child {
+        border: none;
+    }
+
+    .mpp-slide {
+        position: relative;
+        left: 50%;
+        margin-left: -50vw;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100vh;
+        height: 100lvh;
+        scroll-snap-align: start;
+    }
+
+    .mpp-slide-image {
+        position: relative;
+        width: auto;
+        height: auto;
+        max-height: 70vh;
+        max-width: 70vw;
+        border: 0px solid white;
+        box-sizing: content-box;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+        transition: transform 0.3s ease;
+    }
+
+    .mpp-slide-content-wrapper {
+        position: relative;
+    }
+
+    .mpp-slide-header {
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding-bottom: 10px;
+        transform-origin: bottom left;
+        width: 100%;
+        transform: translateX(100%) rotate(90deg);
+    }
+
+    .mpp-slider-nav {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+        position: absolute;
+        width: fit-content;
+        height: fit-content;
+        top: 50%;
+        left: 50px;
+        transform: translateY(-50%);
+    }
+
+    .mpp-slider-nav-button {
+        color: currentColor;
+        text-decoration-line: none;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+        pointer-events: auto;
+    }
+
+    .mpp-slider-nav-number {
+        pointer-events: auto;
+        cursor: pointer;
+    }
+
+    .mpp-button-disabled {
+        color: #f4f4f4;
+    }
+
+    .mpp-slider-nav-icon {
+        width: 18px;
+    }
+
+    @media(max-width: 750px) {
+        .mpp-collection-section h2 {
+            font-size: 1.8rem;
+        }
+
+        .mpp-drawer-menu {
+            bottom: 50px;
+        }
+
+        .mpp-slider-nav {
+            flex-direction: row;
+            top: auto;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .mpp-slider-nav-button {
+            flex-direction: row;
+            display: none;
+        }
+
+        .mpp-slider-nav-button svg {
+            transform-origin: center center;
+            transform: rotate(-90deg);
+        }
+
+        .mpp-slide-header {
+            right: auto;
+            left: auto;
+            top: auto;
+            bottom: 0;
+            text-align: center;
+            transform: translateY(100%);
+        }
+
+        .mpp-slide-image {
+            max-height: 60vh;
+            max-width: 90vw;
+            border: 0px solid white;
+        }
+
+        .mpp-drawer-left, .mpp-drawer-right {
+            position: absolute;
+            top: auto;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 85vh;
+            padding: 20px 50px;
+            transform: translateY(100%);
+        }
+
+        .mpp-open.mpp-drawer-left, .mpp-open.mpp-drawer-right {
+            transform: translateY(0);
+        }
+    }
+</style>
+
+<section class="mpp-collection-section">
+    {% for product in collection.products %}
+        <div id="slide-{{ forloop.index }}" class="mpp-slide">
+            <div class="mpp-slide-content-wrapper">
+                <img class="mpp-slide-image" src="{{ product.featured_image |  image_url  }}">
+                <div class="mpp-slide-header">
+                    <h2> {{product.title}} </h2>
+                    <p> Bristol, RI USA </p>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    <div class="mpp-slider-track">
+        <div id="mpp-slider-window" class="mpp-slider-window">
+            <div class="mpp-slider-nav">
+                <a id="mpp-slider-nav-button-up" class="mpp-slider-nav-button" href=''>
+                    <p>Prev</p>
+                    <svg class="mpp-slider-nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 67.4 34.7">
+                        <polyline points="1 33.7 33.7 1 66.4 33.7" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4"/>
+                    </svg>
+                </a>
+                <p id="mpp-slider-nav-number" class="mpp-slider-nav-number" onclick="toggleGallery()"> </p>
+                <a id="mpp-slider-nav-button-down" class="mpp-slider-nav-button" href=''>
+                    <svg class="mpp-slider-nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 67.4 34.7">
+                        <polyline points="66.4 1 33.7 33.7 1 1" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4"/>
+                    </svg>
+                    <p>Next</p>
+                </a>
+            </div>
+            <ul class="mpp-drawer-menu">
+                <li onclick="toggleFilter()"> Filter </li>
+                <li onclick="toggleGallery()"> Gallery </li>
+                <li onclick="toggleInfo()"> Info </li>
+            </ul>
+            <div class="mpp-window-overlay"> </div>
+            <div id="mpp-filter" class="mpp-drawer mpp-drawer-left">
+                <svg onclick="toggleFilter()" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
+                <h2> Filter </h2>
+                {{ 'component-facets.css' | asset_url | stylesheet_tag }}
+                <script src="{{ 'facets.js' | asset_url }}" defer="defer"></script>
+                {% render 'facets', results: collection, enable_filtering: true, enable_sorting: true, filter_type: 'drawer', paginate: paginate %}
+            </div>
+            <div id="mpp-gallery" class="mpp-drawer mpp-drawer-bottom">
+                <svg onclick="toggleGallery()" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
+                <h2> Gallery </h2>
+                <div class="mpp-gallery-content mpp-drawer-content">
+                    {% for product in collection.products %}
+                        <a class="mpp-gallery-link" href="#slide-{{ forloop.index }}" onclick="toggleGallery()">
+                            <img class="mpp-gallery-image" src="{{ product.featured_image |  image_url  }}" loading="lazy">
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+            <div id="mpp-info" class="mpp-drawer mpp-drawer-right">
+                <svg onclick="toggleInfo()" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
+                <h2> Image Info </h2>
+                {% for product in collection.products %}
+                    <div class="mpp-info-content mpp-drawer-content" data-product="{{ forloop.index }}">
+                        <div class="mpp-info-heading mpp-info-section">
+                            <h3> {{ product.title }} </h3>
+                            <p> Bristol, RI USA </p>
+                            <p> September 26, 1991 </p>
+                        </div>
+                        <div class="mpp-info-description mpp-info-section">
+                            {{ product.description }}
+                        </div>
+                        <div class="mpp-info-exif mpp-info-section">
+                            <p>Nikon Z7</p>
+                            <p>Nikkor Z 24-120 f/4 S</p>
+                            <p>ISO 100, f/5.6, 1/125 sec, 120mm</p>
+                            <p>HDR</p>
+                        </div>
+                        <button class="mpp-info-button button">Buy Now</button>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    const slideNumberIndicator = document.getElementById("mpp-slider-nav-number");
+    const slideUpButton = document.getElementById("mpp-slider-nav-button-up");
+    const slideDownButton = document.getElementById("mpp-slider-nav-button-down");
+    const slideList = document.querySelectorAll(".mpp-slide");
+    const infoList = document.querySelectorAll(".mpp-info-content");
+    const sliderWindow = document.getElementById("mpp-slider-window");
+    const gallery = document.getElementById("mpp-gallery");
+    const filter = document.getElementById("mpp-filter");
+    const info = document.getElementById("mpp-info");
+
+    const intersectionCallback = (entries) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                const currentIndex = Array.from(slideList).indexOf(entry.target);
+
+                slideNumberIndicator.textContent = `${currentIndex+1}/${slideList.length}`;
+
+                slideUpButton.href = `#slide-${currentIndex}`;
+                slideDownButton.href = `#slide-${currentIndex + 2}`;
+                
+                infoList.forEach((infoItem) => {
+                    if (infoItem.dataset.product == currentIndex + 1) {
+                        infoItem.style.display = "block";
+                    } else {
+                        infoItem.style.display = "none";
+                    }
+                });
+
+                if (currentIndex === 0) {
+                    slideUpButton.removeAttribute('href');
+                    slideUpButton.classList.add("mpp-button-disabled");
+                } else {
+                    slideUpButton.classList.remove("mpp-button-disabled");
+                }
+
+                if (currentIndex === slideList.length-1) {
+                    slideDownButton.removeAttribute('href');
+                    slideDownButton.classList.add("mpp-button-disabled");
+                } else {
+                    slideDownButton.classList.remove("mpp-button-disabled");
+                }
+            }
+        });
+    };
+
+    const intersectionOptions = {
+        threshold: 0.75
+    };
+
+    const observer = new IntersectionObserver( intersectionCallback, intersectionOptions );
+
+    const sectionInit = () => {
+        slideList.forEach(slide => observer.observe(slide));
+    };
+
+    function toggleFilter() {
+        sliderWindow.classList.toggle("mpp-open");
+        filter.classList.toggle("mpp-open");
+    }
+
+    function toggleGallery() {
+        sliderWindow.classList.toggle("mpp-open");
+        gallery.classList.toggle("mpp-open");
+    }
+
+    function toggleInfo() {
+        sliderWindow.classList.toggle("mpp-open");
+        info.classList.toggle("mpp-open");
+    }
+
+    document.addEventListener('DOMContentLoaded', sectionInit);
+
+</script>
+
+
+{% schema %}
+{
+    "name": "Collection Page Simple",
+    "settings": []
+}
+{% endschema %}
