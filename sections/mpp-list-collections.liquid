@@ -1,0 +1,126 @@
+{% if request.page_type == 'list-collections' %}
+    <section class="mpp-collection-list-section page-width">
+        {% for collection in collections %}
+            <a class="mpp-collection-card-link" href="{{ collection.url }}">
+                <div class="mpp-collection-card">
+                    <p class="mpp-collection-card-text">{{ collection.title }}</p>
+                    <div class="mpp-collection-card-image-wrapper">
+                        <img class="mpp-collection-card-image" src="{{ collection.image |  image_url  }}">
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+    </section>
+{% endif %}
+
+<style>
+    .mpp-collection-list-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 30px;
+        margin-bottom: 30px;
+        gap: 40px;
+        width: 100%;
+    }
+
+    .mpp-collection-card-link {
+        color: currentColor;
+        text-decoration-line: none;
+    }
+
+    .mpp-collection-card {
+        aspect-ratio: 2.667/1;
+        width: 100%;
+        max-width: 1800px;
+        position: relative;
+        display: flex;
+        flex-direction: row;
+    }
+
+    .mpp-collection-card-text {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        margin: 0;
+        padding-left: 20px;
+        padding-bottom: 10px;
+        padding-top: 10px;
+        transform-origin: bottom left;
+        transform: rotate(-90deg);
+    }
+
+    .mpp-collection-card-text::after {
+        content: '';
+        display: block;
+        position: absolute;
+        left: 110%;
+        top: 50%;
+        transform: translateY(1px);
+        height: 1px;
+        width: 0;
+        background-color: black;
+        transition: width 0.3s ease;
+    }
+
+    .mpp-collection-card:hover .mpp-collection-card-text::after{
+        width: 100px;
+    }
+
+    .mpp-collection-card-image-wrapper {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        border-radius: 6px;
+    }
+
+    .mpp-collection-card-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition: transform 3s ease;
+    }
+
+    .mpp-collection-card:hover .mpp-collection-card-image {
+        transform: scale(1.1) translate(-3%, -3%);
+    }
+
+    @media(max-width: 750px) {
+        .mpp-collection-card {
+            aspect-ratio: 1.75/1;
+            width: 85%;
+            margin: auto;
+            position: relative;
+        }
+
+        .mpp-collection-card-text {
+            padding-bottom: 5px;
+            padding-top: 5px;
+        }
+
+        .mpp-collection-list-section {
+            margin-top: 30px;
+            margin-bottom: 30px;
+            gap: 20px;
+        }
+
+        .mpp-collection-card-text::after {
+            display: none;
+        }
+    }
+</style>
+
+
+{% schema %}
+{
+    "name": "Collection List Page",
+    "tag": "section",
+    "class": "section",
+    "settings": [
+    { "type": "image_picker", "id": "image", "label": "Background Image"},
+    { "type": "color", "id": "overlay-color", "label": "Overlay Color"}
+    ]
+}
+{% endschema %}
