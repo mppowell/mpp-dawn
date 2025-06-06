@@ -349,7 +349,7 @@
                     <p>Next</p>
                 </a>
             </div>
-            <ul class="mpp-drawer-menu">
+            <ul class="mpp-drawer-menu text-mono">
                 <li onclick="toggleFilter()"> Filter </li>
                 <li onclick="toggleGallery()"> Gallery </li>
                 <li onclick="toggleInfo()"> Info </li>
@@ -380,13 +380,13 @@
                     <div class="mpp-info-content mpp-drawer-content" data-product="{{ forloop.index }}">
                         <div class="mpp-info-heading mpp-info-section">
                             <h3> {{ product.title }} </h3>
-                            <p> Bristol, RI USA </p>
-                            <p> September 26, 1991 </p>
+                            <p class="text-mono"> Bristol, RI USA </p>
+                            <p class="text-mono"> September 26, 1991 </p>
                         </div>
                         <div class="mpp-info-description mpp-info-section">
                             {{ product.description }}
                         </div>
-                        <div class="mpp-info-exif mpp-info-section">
+                        <div class="mpp-info-exif mpp-info-section text-mono">
                             <p>Nikon Z7</p>
                             <p>Nikkor Z 24-120 f/4 S</p>
                             <p>ISO 100, f/5.6, 1/125 sec, 120mm</p>

@@ -143,6 +143,28 @@
         "unit": "%",
         "label": "t:settings_schema.typography.settings.body_scale.label",
         "default": 100
+      },
+      /* Added by MPP */
+      {
+        "type": "header",
+        "content": "Mono"
+      },
+      
+      {
+        "type": "font_picker",
+        "id": "type_mono_font",
+        "default": "assistant_n4",
+        "label": "Font"
+      },
+      {
+        "type": "range",
+        "id": "mono_scale",
+        "min": 100,
+        "max": 130,
+        "step": 5,
+        "unit": "%",
+        "label": "Scale",
+        "default": 100
       }
     ]
   },

@@ -45,6 +45,9 @@
       assign body_font_bold = settings.type_body_font | font_modify: 'weight', 'bold'
       assign body_font_italic = settings.type_body_font | font_modify: 'style', 'italic'
       assign body_font_bold_italic = body_font_bold | font_modify: 'style', 'italic'
+      assign mono_font_bold = settings.type_mono_font | font_modify: 'weight', 'bold'
+      assign mono_font_italic = settings.type_mono_font | font_modify: 'style', 'italic'
+      assign mono_font_bold_italic = mono_font_bold | font_modify: 'style', 'italic'
     %}
 
     {% style %}
@@ -52,6 +55,10 @@
       {{ body_font_bold | font_face: font_display: 'swap' }}
       {{ body_font_italic | font_face: font_display: 'swap' }}
       {{ body_font_bold_italic | font_face: font_display: 'swap' }}
+      {{ settings.type_mono_font | font_face: font_display: 'swap' }}
+      {{ mono_font_bold | font_face: font_display: 'swap' }}
+      {{ mono_font_italic | font_face: font_display: 'swap' }}
+      {{ mono_font_bold_italic | font_face: font_display: 'swap' }}
       {{ settings.type_header_font | font_face: font_display: 'swap' }}
 
       {% for scheme in settings.color_schemes -%}
@@ -100,6 +107,11 @@
       }
 
       :root {
+        --font-mono-family: {{ settings.type_mono_font.family }}, {{ settings.type_mono_font.fallback_families }};
+        --font-mono-style: {{ settings.type_mono_font.style }};
+        --font-mono-weight: {{ settings.type_mono_font.weight }};
+        --font-mono-weight-bold: {{ settings.type_mono_font.weight | plus: 300 | at_most: 1000 }};
+
         --font-body-family: {{ settings.type_body_font.family }}, {{ settings.type_body_font.fallback_families }};
         --font-body-style: {{ settings.type_body_font.style }};
         --font-body-weight: {{ settings.type_body_font.weight }};

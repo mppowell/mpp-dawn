@@ -2,11 +2,6 @@
   "sections": {
     "main": {
       "type": "mpp-list-collections",
-      "settings": {
-        "title": "Collections",
-        "sort": "alphabetical",
-        "image_ratio": "square"
-      }
     }
   },
   "order": [
