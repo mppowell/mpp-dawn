@@ -257,14 +257,124 @@
         width: 18px;
     }
 
-    .mpp-filter-content {
-        text-align: left;
-    }
-
     summary {
         list-style: revert;
         list-style-position: outside;
     }
+
+    .mpp-filter-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .mpp-filter-section {
+        width: 100%;
+    }
+
+    .mpp-price-range-filter {
+        width: 80%;
+    }
+    
+    .mpp-currency-input-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .mpp-currency-input-box {
+        background-color: white;
+        width: 110px;
+        padding: 0px 15px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .mpp-currency-input-box > label {
+        display: none;
+    }
+
+    .mpp-currency-input {
+        all: unset;
+        -moz-appearance: textfield;
+        text-align: right;
+        margin: 0;
+    }
+
+    .mpp-currency-input::-webkit-inner-spin-button,
+    .mpp-currency-input::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    .mpp-range-dual-slider {
+        position: relative;
+        min-height: 30px;
+    }
+
+    .mpp-range-input {
+        -webkit-appearance: none;
+        appearance: none;
+        height: 2px;
+        width: 100%;
+        position: absolute;
+        background-color: #C6C6C6;
+        pointer-events: none;
+    }
+
+    .mpp-range-input::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        pointer-events: all;
+        width: 18px;
+        height: 18px;
+        background-color: #fff;
+        border-radius: 50%;
+        box-shadow: 0 0 0 1px #C6C6C6;
+        cursor: pointer;
+    }
+
+    .mpp-range-input::-moz-range-thumb {
+        -webkit-appearance: none;
+        pointer-events: all;
+        width: 18px;
+        height: 18px;
+        background-color: #fff;
+        border-radius: 50%;
+        box-shadow: 0 0 0 1px #C6C6C6;
+        cursor: pointer;
+    }
+
+    .mpp-range-input::-webkit-slider-thumb:hover {
+        background: #f7f7f7;
+    }
+
+    .mpp-range-input::-webkit-slider-thumb:active {
+        box-shadow: inset 0 0 3px #387bbe;
+        -webkit-box-shadow: inset 0 0 3px #387bbe, 0 0 9px #387bbe;
+    }
+
+    .mpp-range-input::-moz-range-thumb:hover {
+        background: #f7f7f7;
+    }
+
+    .mpp-range-input::-moz-range-thumb:active {
+        box-shadow: inset 0 0 3px #387bbe;
+        -webkit-box-shadow: inset 0 0 3px #387bbe, 0 0 9px #387bbe;
+    }
+
+    .mpp-bottom-slider {
+        height: 0;
+        z-index: 1;
+        transform: translateY(1px);
+    }
+
+    .mpp-slider-fill {
+        width: 100%;
+        height: 2px;
+        position: absolute;
+        box-shadow: 0 0 3px #387bbe;
+    }
+
 
     @media(max-width: 750px) {
         .mpp-collection-section h2 {
@@ -341,203 +451,211 @@
         <div id="mpp-slider-window" class="mpp-slider-window">
             <div class="mpp-slider-nav">
                 <a id="mpp-slider-nav-button-up" class="mpp-slider-nav-button" href=''>
-                    <p>Prev</p>
+                    <pre>Prev</pre>
                     <svg class="mpp-slider-nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 67.4 34.7">
                         <polyline points="1 33.7 33.7 1 66.4 33.7" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4"/>
                     </svg>
                 </a>
-                <p id="mpp-slider-nav-number" class="mpp-slider-nav-number" onclick="toggleGallery()"> </p>
+                <pre id="mpp-slider-nav-number" class="mpp-slider-nav-number" onclick="toggleGallery()"> </pre>
                 <a id="mpp-slider-nav-button-down" class="mpp-slider-nav-button" href=''>
                     <svg class="mpp-slider-nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 67.4 34.7">
                         <polyline points="66.4 1 33.7 33.7 1 1" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4"/>
                     </svg>
-                    <p>Next</p>
+                    <pre>Next</pre>
                 </a>
             </div>
-            <ul class="mpp-drawer-menu text-mono">
-                <li onclick="toggleFilter()"> Filter </li>
-                <li onclick="toggleGallery()"> Gallery </li>
-                <li onclick="toggleInfo()"> Info </li>
+            <ul class="mpp-drawer-menu">
+                <li onclick="toggleFilter()"><pre> Filter </pre></li>
+                <li onclick="toggleGallery()"><pre> Gallery </pre></li>
+                <li onclick="toggleInfo()"><pre> Info </pre></li>
             </ul>
             <div class="mpp-window-overlay"> </div>
             <div id="mpp-filter" class="mpp-drawer mpp-drawer-left">
                 <svg onclick="toggleFilter()" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
                 <h2> Filter </h2>
-                <div class="mpp-filter-content mpp-drawer-content">
-                    <form >
-                        {%- for filter in collection.filters -%}
-                            <details>
-                            <summary>
-                                {{ filter.label }}
-                                {%- if filter.active_values.size > 0 -%}
-                                    ({{ filter.active_values.size }})
-                                {%- endif -%}
-                            </summary>
-    
+                <form class="mpp-filter-content mpp-drawer-content">
+                    {%- for filter in collection.filters -%}
+                        <details class="mpp-filter-section">
+                        <summary>
+                            {{ filter.label }}
+                            {%- if filter.active_values.size > 0 -%}
+                                ({{ filter.active_values.size }})
+                            {%- endif -%}
+                        </summary>
+
+                        <div>
                             <div>
-                                <div>
-                                <p>{{ filter.active_values.size }} selected</p>
-                                {%- if filter.active_values.size > 0 -%}
-                                    <p><a href="{{ filter.url_to_remove }}">Reset</a></p>
-                                {%- endif -%}
-                                </div>
-                                {%- case filter.type -%}
-                                {%- when 'boolean' -%}
-                                    <ul>
-                                        <li>
-                                        <label for="Filter-{{ filter.param_name }}-{{ filter.true_value.value }}">
+                            <p>{{ filter.active_values.size }} selected</p>
+                            {%- if filter.active_values.size > 0 -%}
+                                <p><a href="{{ filter.url_to_remove }}">Reset</a></p>
+                            {%- endif -%}
+                            </div>
+                            {%- case filter.type -%}
+                            {%- when 'boolean' -%}
+                                <ul>
+                                    <li>
+                                    <label for="Filter-{{ filter.param_name }}-{{ filter.true_value.value }}">
                                         <input type="checkbox"
                                             name="{{ filter.param_name }}"
                                             value="{{ filter.true_value.value }}"
                                             id="Filter-{{ filter.param_name }}"
                                             {% if filter.true_value.active -%}checked{%- endif %}
                                             {% if filter.true_value.count == 0 and filter.true_value.active == false -%}disabled{%- endif -%}
-                                        >{{ filter.true_value.label }}</label>
-                                        </li>
-                                        <li>
-                                        <label for="Filter-{{ filter.param_name }}-{{ filter.false_value.value }}">
+                                        >
+                                        {{ filter.true_value.label }}
+                                    </label>
+                                    </li>
+                                    <li>
+                                    <label for="Filter-{{ filter.param_name }}-{{ filter.false_value.value }}">
                                         <input type="checkbox"
                                             name="{{ filter.param_name }}"
                                             value="{{ filter.false_value.value }}"
                                             id="Filter-{{ filter.param_name }}"
                                             {% if filter.false_value.active -%}checked{%- endif %}
                                             {% if filter.false_value.count == 0 and filter.false_value.active == false -%}disabled{%- endif %}
-                                        >{{ filter.false_value.label }}</label>
-                                        </li>
-                                    </ul>
-    
-                                    <div>
-                                    <input type="submit" value="Apply">
-                                    </div>
-                                {%- when 'list' -%}
-                                    <ul>
-                                    {%- for filter_value in filter.values -%}
-                                        <li>
-                                        <label for="Filter-{{ filter.param_name }}-{{ forloop.index }}">
-                                        <input type="checkbox"
-                                            name="{{ filter_value.param_name }}"
-                                            value="{{ filter_value.value }}"
-                                            id="Filter-{{ filter.param_name }}-{{ forloop.index }}"
-                                            {% if filter_value.active -%}checked{%- endif %}
-                                            {% if filter_value.count == 0 and filter_value.active == false -%}disabled{%- endif %}
                                         >
-                                            <span>
-                                            {%- case filter_value.display.type -%}
-                                                {%- when 'colors' -%}
-                                                {% liquid
-                                                    assign size_limit = filter_value.display.value.size | at_most: 4
-                                                    assign rotation = '0deg'
-                                                    if size_limit == 2
-                                                    assign rotation = '45deg'
-                                                    endif
-    
-                                                    assign angle_increment = 360 | divided_by: size_limit
-                                                    assign angle = 0
-                                                %}
-                                                {%- capture conic_gradient -%}
-                                                    {%- for color in filter_value.display.value limit: size_limit -%}
-                                                    {{ color }} {{ angle }}deg{%- assign angle = angle | plus: angle_increment %} {{ angle }}deg{%- unless forloop.last %}, {%- endunless -%}
-                                                    {%- endfor -%}
-                                                {%- endcapture -%}
-                                                <span style="
-                                                    width: 25px;
-                                                    height: 25px;
-                                                    border-radius: 50%;
-                                                    display: flex;
-                                                    justify-content: center;
-                                                    align-items: center;
-                                                    background: conic-gradient({{ conic_gradient }}); transform: rotateZ({{ rotation }});
-                                                "></span>
-                                                {%- when 'image' -%}
-                                                {{
-                                                    filter_value.display.value
-                                                    | image_url: width: 25
-                                                    | image_tag: alt: filter_value.display.value.alt
-                                                }}
-                                                {%- else -%}
-                                                <span class="visual-display__child"></span>
-                                            {%- endcase -%}
-                                            </span>
-                                            {{ filter_value.label }}
-                                        </label>
-                                        </li>
-                                    {%- endfor -%}
-                                    </ul>
-    
-                                    <div>
-                                    <input type="submit" value="Apply">
-                                    </div>
-                                {%- when 'price_range' -%}
-                                    <div class="filter-group-display__price-range">
-                                    <div class="filter-group-display__price-range-from">
-                                        <span>{{ cart.currency.symbol }}</span>
-    
-                                        <input name="{{ filter.min_value.param_name }}"
-                                        id="Filter-{{ filter.min_value.param_name }}"
-                                        {% if filter.min_value.value -%}
-                                            value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"
-                                        {%- endif %}
-                                        type="number"
-                                        placeholder="0"
-                                        min="0"
-                                        max="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
-                                        >
-    
-                                        <label for="Filter-{{ filter.min_value.param_name }}">From</label>
-                                    </div>
-                                    <div class="filter-group-display__price-range-to">
-                                        <span>{{ cart.currency.symbol }}</span>
-    
-                                        <input name="{{ filter.max_value.param_name }}"
-                                        id="Filter-{{ filter.max_value.param_name }}"
-                                        {% if filter.max_value.value -%}
-                                            value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"
-                                        {%- endif %}
-                                        type="number"
-                                        placeholder="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
-                                        min="0"
-                                        max="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
-                                        >
-    
-                                        <label for="Filter-{{ filter.max_value.param_name }}">To</label>
-                                    </div>
-                                    </div>
-    
-                                    <div class="filter-group-display__submit">
-                                    <input type="submit" value="Apply">
-                                    </div>
-                                {%- endcase -%}
-                            </div>
-                            </details>
-                        {%- endfor -%}
-    
-                        <div>
-                            {%- for filter in collection.filters -%}
-                            {%- if filter.type == "price_range" -%}
-                                {%- if filter.min_value.value != nil or filter.max_value.value != nil -%}
-                                <p>
-                                    <a href="{{ filter.url_to_remove }}">
-                                    {%- assign min_value = filter.min_value.value | default: 0 -%}
-                                    {%- assign max_value = filter.max_value.value | default: filter.range_max -%}
-                                    {{ min_value | money }} - {{ max_value | money }} X
-                                    </a>
-                                </p>
-                                {%- endif -%}
-                            {%- else -%}
-                                {%- for filter_value in filter.active_values -%}
-                                <p>
-                                    <a href="{{ filter_value.url_to_remove }}">
-                                    {{ filter.label }}: {{ filter_value.label }} X
-                                    </a>
-                                </p>
+                                        {{ filter.false_value.label }}
+                                    </label>
+                                    </li>
+                                </ul>
+
+                            {%- when 'list' -%}
+                                <ul>
+                                {%- for filter_value in filter.values -%}
+                                    <li>
+                                    <label for="Filter-{{ filter.param_name }}-{{ forloop.index }}">
+                                    <input type="checkbox"
+                                        name="{{ filter_value.param_name }}"
+                                        value="{{ filter_value.value }}"
+                                        id="Filter-{{ filter.param_name }}-{{ forloop.index }}"
+                                        {% if filter_value.active -%}checked{%- endif %}
+                                        {% if filter_value.count == 0 and filter_value.active == false -%}disabled{%- endif %}
+                                    >
+                                        <span>
+                                        {%- case filter_value.display.type -%}
+                                            {%- when 'colors' -%}
+                                            {% liquid
+                                                assign size_limit = filter_value.display.value.size | at_most: 4
+                                                assign rotation = '0deg'
+                                                if size_limit == 2
+                                                assign rotation = '45deg'
+                                                endif
+
+                                                assign angle_increment = 360 | divided_by: size_limit
+                                                assign angle = 0
+                                            %}
+                                            {%- capture conic_gradient -%}
+                                                {%- for color in filter_value.display.value limit: size_limit -%}
+                                                {{ color }} {{ angle }}deg{%- assign angle = angle | plus: angle_increment %} {{ angle }}deg{%- unless forloop.last %}, {%- endunless -%}
+                                                {%- endfor -%}
+                                            {%- endcapture -%}
+                                            <span style="
+                                                width: 25px;
+                                                height: 25px;
+                                                border-radius: 50%;
+                                                display: flex;
+                                                justify-content: center;
+                                                align-items: center;
+                                                background: conic-gradient({{ conic_gradient }}); transform: rotateZ({{ rotation }});
+                                            "></span>
+                                            {%- when 'image' -%}
+                                            {{
+                                                filter_value.display.value
+                                                | image_url: width: 25
+                                                | image_tag: alt: filter_value.display.value.alt
+                                            }}
+                                            {%- else -%}
+                                            <span class="visual-display__child"></span>
+                                        {%- endcase -%}
+                                        </span>
+                                        {{ filter_value.label }}
+                                    </label>
+                                    </li>
                                 {%- endfor -%}
-                            {%- endif -%}
-                            {%- endfor -%}
+                                </ul>
+
+                            {%- when 'price_range' -%}
+                                <div class="mpp-price-range-filter">
+                                    <div class="mpp-range-dual-slider">
+                                        <div class="mpp-slider-fill" id="Fill-{{ filter.param_name }}"> </div>
+                                        <input type="range" id="Range-{{ filter.min_value.param_name }}" class="mpp-range-input mpp-bottom-slider" min="0" max="{{ filter.range_max | money_without_currency | replace: ',', '' }}" value="0" oninput="updateSlider(this, '{{ filter.param_name }}', '{{ filter.min_value.param_name }}', '{{ filter.max_value.param_name }}')">
+                                        <input type="range" id="Range-{{ filter.max_value.param_name }}" class="mpp-range-input" min="0" max="{{ filter.range_max | money_without_currency | replace: ',', '' }}" value="{{ filter.range_max | money_without_currency | replace: ',', '' }}" oninput="updateSlider(this, '{{ filter.param_name }}', '{{ filter.min_value.param_name }}', '{{ filter.max_value.param_name }}')">
+                                    </div>
+
+                                    <div class="mpp-currency-input-container">
+                                        <div class="mpp-currency-input-box">
+                                            <span>{{ cart.currency.symbol }}</span>
+
+                                            <input name="{{ filter.min_value.param_name }}"
+                                            id="Field-{{ filter.min_value.param_name }}" 
+                                            class="mpp-currency-input"
+                                            {% if filter.min_value.value -%}
+                                                value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"
+                                            {%- endif %}
+                                            type="number"
+                                            placeholder="0"
+                                            min="0"
+                                            max="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                                            onchange="updateSlider(this, '{{ filter.param_name }}', '{{ filter.min_value.param_name }}', '{{ filter.max_value.param_name }}')"
+                                            >
+
+                                            <label for="Field-{{ filter.min_value.param_name }}"> </label>
+                                        </div>
+                                        <p>-</p>
+                                        <div class="mpp-currency-input-box">
+                                            <span>{{ cart.currency.symbol }}</span>
+
+                                            <input name="{{ filter.max_value.param_name }}"
+                                            id="Field-{{ filter.max_value.param_name }}"
+                                            class="mpp-currency-input"
+                                            {% if filter.max_value.value -%}
+                                                value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"
+                                            {%- endif %}
+                                            type="number"
+                                            placeholder="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                                            min="0"
+                                            max="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                                            onchange="updateSlider(this, '{{ filter.param_name }}', '{{ filter.min_value.param_name }}', '{{ filter.max_value.param_name }}')"
+                                            >
+        
+                                            <label for="Field-{{ filter.max_value.param_name }}"> </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            {%- endcase -%}
                         </div>
+                        </details>
+                    {%- endfor -%}
+
+                    <div>
+                        {%- for filter in collection.filters -%}
+                        {%- if filter.type == "price_range" -%}
+                            {%- if filter.min_value.value != nil or filter.max_value.value != nil -%}
+                            <p>
+                                <a href="{{ filter.url_to_remove }}">
+                                {%- assign min_value = filter.min_value.value | default: 0 -%}
+                                {%- assign max_value = filter.max_value.value | default: filter.range_max -%}
+                                {{ min_value | money }} - {{ max_value | money }} X
+                                </a>
+                            </p>
+                            {%- endif -%}
+                        {%- else -%}
+                            {%- for filter_value in filter.active_values -%}
+                            <p>
+                                <a href="{{ filter_value.url_to_remove }}">
+                                {{ filter.label }}: {{ filter_value.label }} X
+                                </a>
+                            </p>
+                            {%- endfor -%}
+                        {%- endif -%}
+                        {%- endfor -%}
+                    </div>
+
+                    <div>
                         <input class="button" type="submit" value="Apply">
                         <a class="button" href="{{ collection.url }}?sort_by={{ collection.sort_by }}">Clear all</a>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
             <div id="mpp-gallery" class="mpp-drawer mpp-drawer-bottom">
                 <svg onclick="toggleGallery()" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
@@ -557,8 +675,8 @@
                     <div class="mpp-info-content mpp-drawer-content" data-product="{{ forloop.index }}">
                         <div class="mpp-info-heading mpp-info-section">
                             <h3> {{ product.title }} </h3>
-                            <pre class="text-mono"> Bristol, RI USA </pre>
-                            <pre class="text-mono"> September 26, 1991 </pre>
+                            <pre> Bristol, RI USA </pre>
+                            <pre> September 26, 1991 </pre>
                         </div>
                         <div>
                             {{ product.description }}
@@ -646,6 +764,63 @@
     function toggleInfo() {
         sliderWindow.classList.toggle("mpp-open");
         info.classList.toggle("mpp-open");
+    }
+
+    function updateSlider( self, filterName, filterMinName, filterMaxName) {
+        const sliderFill = document.getElementById("Fill-" + filterName);
+        const minField = document.getElementById("Field-" + filterMinName);
+        const maxField = document.getElementById("Field-" + filterMaxName);
+        const minRange = document.getElementById("Range-" + filterMinName);
+        const maxRange = document.getElementById("Range-" + filterMaxName);
+
+        const separation = 1;
+        const maxPossibleValue = Number(maxRange.max);
+
+        let minRangeValue = Number(minRange.value);
+        let maxRangeValue = Number(maxRange.value);
+        let minFieldValue = Number(minField.value);
+        let maxFieldValue = Number(maxField.value);
+
+        if ( self === minRange ) {
+            if ( minRangeValue > maxRangeValue - separation ) {
+                minRangeValue = maxRangeValue - separation;
+            }
+
+            minRange.value = String(minRangeValue);
+            minField.value = String(minRangeValue);
+
+        } else if ( self === maxRange ) {
+            if ( maxRangeValue < minRangeValue + separation ) {
+                maxRangeValue = minRangeValue + separation;
+            }
+
+            maxRange.value = String(maxRangeValue);
+            maxField.value = String(maxRangeValue);
+
+        } else if (self === minField ) {
+            if ( minFieldValue > maxFieldValue - separation ) {
+                minFieldValue = maxFieldValue - separation;
+            }
+
+            minRange.value = String(minFieldValue);
+            minField.value = String(minFieldValue);
+
+        } else if (self === maxField ) {
+            if ( maxFieldValue < minFieldValue + separation ) {
+                maxFieldValue = minFieldValue + separation;
+            }
+
+            maxRange.value = String(maxFieldValue);
+            maxField.value = String(maxFieldValue);
+
+        }
+
+        let percentMin = (Number(minRange.value) / maxPossibleValue) * 100;
+        let percentMax = (Number(maxRange.value) / maxPossibleValue) * 100;
+
+        sliderFill.style.left = percentMin + "%";
+        sliderFill.style.width = (percentMax - percentMin) + "%";
+
     }
 
     document.addEventListener('DOMContentLoaded', sectionInit);
