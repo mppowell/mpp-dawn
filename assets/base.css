@@ -264,6 +264,7 @@ pre {
   font-family: var(--font-mono-family);
   font-style: var(--font-mono-style);
   font-weight: var(--font-mono-weight);
+  margin: 0;
 }
 
 /* Added by MPP */
@@ -2365,6 +2366,7 @@ input[type='checkbox'] {
   display: block;
   position: relative;
   background-color: rgb(var(--color-background));
+  box-shadow: 3px 4px 4px rgb(0 0 0 / 20%);
 }
 
 .header-wrapper--border-bottom {

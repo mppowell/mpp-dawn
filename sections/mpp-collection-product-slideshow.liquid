@@ -108,12 +108,14 @@
         margin-bottom: 40px;
     }
 
-    .mpp-info-description {
-        font-family: "Maven Pro", sans-serif;
-    }
-
     .mpp-info-exif {
         text-align: right;
+    }
+
+    .mpp-info-button-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
     }
 
     .mpp-drawer-content {
@@ -148,17 +150,17 @@
         height: 100vh;
         height: 100dvh;
         overflow: hidden;
-        anchor-name: --window-anchor;
     }
 
     .mpp-drawer-window {
-        position: absolute;
-        position-anchor: --window-anchor;
-        height: anchor-size(height);
-        width: anchor-size(width);
-        top: anchor(top);
+        position: fixed;
+        inset: 0;
         pointer-events: none;
         z-index: 100;
+    }
+
+    .mpp-drawer-window.mpp-open {
+        pointer-events: auto;
     }
 
     .mpp-window-overlay {
@@ -298,6 +300,11 @@
     .mpp-filter-section-content {
         margin: 10px 0px;
     }
+
+    .mpp-filter-list {
+        list-style-type: none;
+        padding: 0;
+    }
     
     .mpp-price-range-filter {
         width: 80%;
@@ -308,6 +315,7 @@
         display: flex;
         flex-direction: row;
         justify-content: space-between;
+        align-items: center;
     }
 
     .mpp-currency-input-box {
@@ -316,6 +324,9 @@
         padding: 0px 15px;
         display: flex;
         justify-content: space-between;
+        align-items: center;
+        box-sizing: border-box;
+        height: fit-content;
     }
 
     .mpp-currency-input-box > label {
@@ -327,6 +338,7 @@
         -moz-appearance: textfield;
         text-align: right;
         margin: 0;
+        padding: 4px 0;
     }
 
     .mpp-currency-input::-webkit-inner-spin-button,
@@ -338,6 +350,7 @@
     .mpp-range-dual-slider {
         position: relative;
         min-height: 30px;
+        padding-top: 10px;
     }
 
     .mpp-range-input {
@@ -414,6 +427,10 @@
         display: flex;
         flex-direction: row;
         justify-content: space-between;
+    }
+
+    .mpp-filter-button-container {
+        padding-top: 20px;
     }
 
 
@@ -516,13 +533,13 @@
 
 
 <div id="mpp-drawer-window" class="mpp-drawer-window">
-    <div class="mpp-window-overlay"> </div>
+    <div class="mpp-window-overlay" onclick="closeAllDrawers()"> </div>
     <div id="mpp-filter" class="mpp-drawer mpp-drawer-left">
         <svg class="mpp-drawer-close-icon" onclick="toggleFilter()" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
         <h2> Filter </h2>
         <form class="mpp-filter-content mpp-drawer-content">
             {%- for filter in collection.filters -%}
-                <hr class="mpp-divider">
+                <div class="mpp-divider"> </div>
                 <details class="mpp-filter-section">
                 <summary class="mpp-filter-section-header">
                     {{ filter.label }}
@@ -537,7 +554,7 @@
                 <div class="mpp-filter-section-content">
                     {%- case filter.type -%}
                     {%- when 'boolean' -%}
-                        <ul>
+                        <ul class="mpp-filter-list">
                             <li>
                             <label class="mpp-filter-list-row" for="Filter-{{ filter.param_name }}-{{ filter.true_value.value }}">
                                 <div>
@@ -571,7 +588,7 @@
                         </ul>
 
                     {%- when 'list' -%}
-                        <ul>
+                        <ul class="mpp-filter-list">
                         {%- for filter_value in filter.values -%}
                             <li>
                             <label class="mpp-filter-list-row" for="Filter-{{ filter.param_name }}-{{ forloop.index }}">
@@ -681,6 +698,7 @@
                 </div>
                 </details>
             {%- endfor -%}
+            <div class="mpp-divider"> </div>
 
             <div>
                 {%- for filter in collection.filters -%}
@@ -706,7 +724,7 @@
                 {%- endfor -%}
             </div>
 
-            <div>
+            <div class="mpp-filter-button-container">
                 <input class="button" type="submit" value="Apply">
                 <a class="button" href="{{ collection.url }}?sort_by={{ collection.sort_by }}">Clear all</a>
             </div>
@@ -742,9 +760,11 @@
                     <pre>ISO 100, f/5.6, 1/125 sec, 120mm</pre>
                     <pre>HDR</pre>
                 </div>
+                <div class="mpp-info-button-container">
+                    <a class="button" href="{{ product.url }}">Buy Now</a>
+                </div>
             </div>
         {% endfor %}
-        <a class="button" href="{{ product.url }}">Buy Now</a>
     </div>
 </div>
 
@@ -807,16 +827,29 @@
     function toggleFilter() {
         drawerWindow.classList.toggle("mpp-open");
         filter.classList.toggle("mpp-open");
+        gallery.classList.remove("mpp-open");
+        info.classList.remove("mpp-open");
     }
 
     function toggleGallery() {
         drawerWindow.classList.toggle("mpp-open");
         gallery.classList.toggle("mpp-open");
+        filter.classList.remove("mpp-open");
+        info.classList.remove("mpp-open");
     }
 
     function toggleInfo() {
         drawerWindow.classList.toggle("mpp-open");
         info.classList.toggle("mpp-open");
+        filter.classList.remove("mpp-open");
+        gallery.classList.remove("mpp-open");
+    }
+
+    function closeAllDrawers() {
+        drawerWindow.classList.remove("mpp-open");
+        filter.classList.remove("mpp-open");
+        gallery.classList.remove("mpp-open");
+        info.classList.remove("mpp-open");
     }
 
     function updateSlider( self, filterName, filterMinName, filterMaxName) {
