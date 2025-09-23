@@ -5,7 +5,20 @@
                 <div class="mpp-collection-card">
                     <p class="mpp-collection-card-text">{{ collection.title }}</p>
                     <div class="mpp-collection-card-image-wrapper">
-                        <img class="mpp-collection-card-image" src="{{ collection.image |  image_url  }}">
+                        <img
+                        class="mpp-collection-card-image"
+                        srcset="
+                        {%- if collection.image.width >= 640 -%}{{ collection.image | image_url: width: 600 }} 600w,{%- endif -%}
+                        {%- if collection.image.width >= 960 -%}{{ collection.image | image_url: width: 960 }} 960w,{%- endif -%}
+                        {%- if collection.image.width >= 1200 -%}{{ collection.image | image_url: width: 1200 }} 1200w,{%- endif -%}
+                        {%- if collection.image.width >= 1600 -%}{{ collection.image | image_url: width: 1600 }} 1600w,{%- endif -%}
+                        {%- if collection.image.width >= 1800 -%}{{ collection.image | image_url: width: 1800 }} 1800w,{%- endif -%}
+                        {%- if collection.image.width >= 2400 -%}{{ collection.image | image_url: width: 2400 }} 2400w,{%- endif -%}
+                        {%- if collection.image.width >= 2800 -%}{{ collection.image | image_url: width: 2800 }} 2800w,{%- endif -%}"
+                        sizes="(max-width: 750px) 85vw, 1800px"
+                        src="{{ collection.image | image_url: width: 1800 }}"
+                        alt="{{ collection.image.alt | escape }}"
+                        >
                     </div>
                 </div>
             </a>

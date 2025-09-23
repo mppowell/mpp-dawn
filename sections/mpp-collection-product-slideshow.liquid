@@ -91,9 +91,10 @@
 
     .mpp-gallery-content {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(15vw, 1fr));
+        grid-template-columns: repeat(auto-fill, 250px);
         grid-auto-rows: min-content;
-        gap: 1vw;
+        gap: 10px;
+        justify-content: center;
     }
 
     .mpp-info-content {
@@ -497,7 +498,24 @@
     {% for product in collection.products %}
         <div id="slide-{{ forloop.index }}" class="mpp-slide">
             <div class="mpp-slide-content-wrapper">
-                <img class="mpp-slide-image" src="{{ product.featured_image |  image_url  }}">
+                <img
+                    class="mpp-slide-image"
+                    srcset="
+                    {%- if product.featured_image.width >= 550 -%}{{ product.featured_image | image_url: width: 550 }} 550w,{%- endif -%}
+                    {%- if product.featured_image.width >= 1100 -%}{{ product.featured_image | image_url: width: 1100 }} 1100w,{%- endif -%}
+                    {%- if product.featured_image.width >= 1445 -%}{{ product.featured_image | image_url: width: 1445 }} 1445w,{%- endif -%}
+                    {%- if product.featured_image.width >= 1680 -%}{{ product.featured_image | image_url: width: 1680 }} 1680w,{%- endif -%}
+                    {%- if product.featured_image.width >= 2048 -%}{{ product.featured_image | image_url: width: 2048 }} 2048w,{%- endif -%}
+                    {%- if product.featured_image.width >= 2200 -%}{{ product.featured_image | image_url: width: 2200 }} 2200w,{%- endif -%}
+                    {%- if product.featured_image.width >= 2890 -%}{{ product.featured_image | image_url: width: 2890 }} 2890w,{%- endif -%}
+                    {%- if product.featured_image.width >= 4096 -%}{{ product.featured_image | image_url: width: 4096 }} 4096w,{%- endif -%}
+                    {{ product.featured_image | image_url }} {{ product.featured_image.width }}w"
+                    sizes="(min-width: 750px) 70vw, 90vw"
+                    src="{{ product.featured_image | image_url: width: 1445 }}"
+                    alt="{{ product.featured_image.alt | escape }}"
+                    width="1100"
+                    height="{{ 1100 | divided_by: product.featured_image.aspect_ratio | ceil }}"
+                >
                 <div class="mpp-slide-header">
                     <h2> {{product.title}} </h2>
                     <pre> Bristol, RI USA </pre>
@@ -736,7 +754,7 @@
         <div class="mpp-gallery-content mpp-drawer-content">
             {% for product in collection.products %}
                 <a class="mpp-gallery-link" href="#slide-{{ forloop.index }}" onclick="toggleGallery()">
-                    <img class="mpp-gallery-image" src="{{ product.featured_image |  image_url  }}" loading="lazy">
+                    <img class="mpp-gallery-image" src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ product.featured_image.alt | escape }}">
                 </a>
             {% endfor %}
         </div>
